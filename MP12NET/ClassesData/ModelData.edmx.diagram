@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8aec3d7c9ebc44ea84cc576683356e3f" Name="Diagram1">
+        <EntityTypeShape EntityType="DatabaseModel.Courses" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="DatabaseModel.Questions" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="DatabaseModel.Repartition" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DatabaseModel.Teacher" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="DatabaseModel.FK_Questions_ToCourses" ManuallyRouted="false" />
+        <AssociationConnector Association="DatabaseModel.FK_Repartition_ToCourses" ManuallyRouted="false" />
+        <AssociationConnector Association="DatabaseModel.FK_Repartition_ToTeacher" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DatabaseModel.Certification" Width="1.5" PointX="3" PointY="7.875" />
+        <AssociationConnector Association="DatabaseModel.FK_Certification_ToTeacher" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

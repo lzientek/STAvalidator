@@ -1,0 +1,16 @@
+﻿ _______  _______  _______  _______ 
+|       ||       ||       ||       |
+|_     _||    ___||  _____||_     _|
+  |   |  |   |___ | |_____   |   |  
+  |   |  |    ___||_____  |  |   |  
+  |   |  |   |___  _____| |  |   |  
+  |___|  |_______||_______|  |___| 
+
+_____________________________________
+	1. Create a new trainer
+	2. Create a new questions
+	3. Start the validation
+	4. Show each Teacher
+	5. Show each Questions
+_____________________________________
+Make your choice : type 1,2,3,... or 6 to exit.

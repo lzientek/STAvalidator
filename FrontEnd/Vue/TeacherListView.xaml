@@ -1,0 +1,295 @@
+﻿<UserControl x:Class="MP22NET.WpfFrontEnd.Vue.TeacherListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vue="clr-namespace:MP22NET.Vue"
+             xmlns:vue1="clr-namespace:MP22NET.WpfFrontEnd.Vue"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="MinWidth" Value="150"/>
+        </Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="100" Width="300" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition MinWidth="300"  />
+        </Grid.ColumnDefinitions>
+
+        <!--list box teachers-->
+        <Grid Name="ListboxGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="42"/>
+            </Grid.RowDefinitions>
+
+            <!--flip view-->
+            <Grid Visibility="{Binding ElementName=SliderAffichageLevel,Path=Value,
+                    Converter={StaticResource InverseNumberToVisible},ConverterParameter=3}" 
+                    IsVisibleChanged="FlipViewDisp_OnVisibleChange">
+                
+                <vue1:TeacherFlipView DataContext="{Binding ElementName=TeachersListBox,Path=SelectedItem}"
+                                     x:Name="FlipView" SuivantClick="FlipView_OnSuivantClick"
+                                     PrecedentClick="FlipView_OnPrecedentClick"/>
+            </Grid>
+            
+            <GridSplitter Grid.Row="1" Height="3" HorizontalAlignment="Stretch" />
+
+            <ListBox Grid.Row="2" ItemsSource="{Binding Source={StaticResource Data},Path=Teachers,Mode=OneWay}"
+                     SelectionMode="Single"
+                     Name="TeachersListBox"  >
+                <!--resource menu contextuelle-->
+                <ListBox.Resources>
+                    <ContextMenu x:Key="ContextMenu" >
+                        <MenuItem Header="Supprimer" Click="ButtonSupprimerTeacher_OnClick"/>
+                        <MenuItem Header="Ajouter un STA" Click="ButtonAjouterTeacher_OnClick"/>
+                        <MenuItem Header="Faire passer la validation" Click="MenuItemPassageCertif_OnClick"/>
+                    </ContextMenu>
+
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="ContextMenu" Value="{StaticResource ContextMenu}"/>
+                    </Style>
+                </ListBox.Resources>
+
+                <ListBox.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <vue1:TeacherView AffichageLevel="{Binding ElementName=SliderAffichageLevel,Path=Value}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Slider Grid.Row="3" Minimum="1" Maximum="4" 
+                    Name="SliderAffichageLevel" />
+
+            <!--bouto ajouter supprimer-->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Click="ButtonAjouterTeacher_OnClick" ToolTip="Ajouter un prof" Margin="4" >
+                    <Path Data="M19.833,0L32.5,0 32.5,19.833999 52.334,19.833999 52.334,32.500999 32.5,32.500999 32.5,52.333 19.833,52.333 19.833,32.500999 0,32.500999 0,19.833999 19.833,19.833999z"
+                          Stretch="Uniform" Fill="White" Width="18" Height="18" Margin="0" />
+                </Button>
+
+                <Button Grid.Column="1" Click="ButtonSupprimerTeacher_OnClick"
+                        ToolTip="Supprimer le prof selectionné" Margin="4"
+                        IsEnabled="{Binding ElementName=TeachersListBox,Path=SelectedIndex,
+                        Converter={StaticResource SelectedIndexToBoolConverter}}">
+
+                    <Path Data="M33.978,27.679999L33.978,58.098995 41.374,58.098995 41.374,27.679999z M14.841001,27.679999L14.841001,58.098995 22.237,58.098995 22.237,27.679999z M4.0320003,22.430001L52.183002,22.430001 52.183002,63.995998 4.0320003,63.995998z M15.974001,0L40.194999,0 40.194999,7.7200003 56.166999,7.7200003 56.166999,15.995 0,15.995 0,7.7200003 15.974001,7.7200003z"
+                          Stretch="Uniform" Fill="White" Width="18" Height="18" Margin="0" />
+                </Button>
+            </Grid>
+
+        </Grid>
+
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5,0,0,0" Width="5" />
+
+
+        <!--grid details-->
+        <Grid Grid.Column="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid  Margin="5,0,0,0" MinWidth="300" Name="DetailGrid" 
+              DataContext="{Binding ElementName=TeachersListBox,Path=SelectedItem,Mode=TwoWay}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.ColumnSpan="2" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.RowSpan="4" Height="80" Width="80" Source="/FrontEnd;component/User-Profile.png"/>
+
+                        <Image Grid.RowSpan="4" Height="80" Width="80" Source="{Binding Path=Id,Converter={StaticResource BitmapImageConverter}}"/>
+                        <!--/FrontEnd;component/User-Profile.png-->
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="Campus Id :" HorizontalAlignment="Right"
+                                   />
+                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Id,Mode=TwoWay}" 
+                                 IsEnabled="False" Name="TextBoxId" LostFocus="TextboxID_OnLostFocus"  />
+
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Nom :" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Name,Mode=TwoWay}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="Prenom :" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Firstname,Mode=TwoWay}" />
+
+                    </Grid>
+
+
+
+
+                    <TextBlock Grid.Row="2" Text="Promo actuel :" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
+                      SelectedIndex="{Binding Path=PromoCurrent,Mode=TwoWay,
+                Converter={StaticResource PromoToIndexConverter}}">
+                        <ComboBoxItem>A.Sc. 1</ComboBoxItem>
+                        <ComboBoxItem>A.Sc. 2</ComboBoxItem>
+                        <ComboBoxItem>B.Sc.</ComboBoxItem>
+                        <ComboBoxItem>M.Sc. 1</ComboBoxItem>
+                        <ComboBoxItem>M.Sc. 2</ComboBoxItem>
+                    </ComboBox>
+
+
+                    <TextBlock Grid.Row="3" Text="Promo STA :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Margin="5" 
+                      SelectedIndex="{Binding Path=PromoDuring,Mode=TwoWay
+                ,Converter={StaticResource PromoToIndexConverter}}">
+                        <ComboBoxItem>A.Sc. 1</ComboBoxItem>
+                        <ComboBoxItem>A.Sc. 2</ComboBoxItem>
+                        <ComboBoxItem>B.Sc.</ComboBoxItem>
+                        <ComboBoxItem>M.Sc. 1</ComboBoxItem>
+                        <ComboBoxItem>M.Sc. 2</ComboBoxItem>
+                    </ComboBox>
+
+
+                    <TextBlock Grid.Row="4" Text="Email :" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Email,Mode=TwoWay}" />
+
+
+                    <TextBlock Grid.Row="5" Text="Commentaire :" HorizontalAlignment="Right" TextWrapping="Wrap"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Height="50" VerticalContentAlignment="Top"
+                             AcceptsReturn="True" Text="{Binding Comment,Mode=TwoWay}"
+                             Name="TextBoxEmail"/>
+
+                    <TextBlock Grid.Row="6" Text="Campus :" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Height="22" Text="{Binding Campus}" 
+                             Name="TextBoxCampus" />
+
+
+
+                    <StackPanel Grid.Row="7" Grid.Column="1" >
+
+                        <!--Certification-->
+                        <TextBlock Text="Certifications:" Margin="1,10,1,1" FontSize="16" />
+                        <ListBox ItemsSource="{Binding Certification}" Name="ListBoxCertif" 
+                                 BorderThickness="1" BorderBrush="LightGray">
+                            <ListBox.Resources>
+                                <ContextMenu x:Key="ContextMenu" >
+                                    <MenuItem Header="Supprimer" Click="ButtonSupprimerCertif_OnClick"/>
+                                    <MenuItem Header="Ajouter une certification" Click="ButtonAjoutCertif_OnClick"/>
+                                </ContextMenu>
+
+                                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="ContextMenu" Value="{StaticResource ContextMenu}"/>
+                                </Style>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Note}" Margin="5,0" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Name}" Margin="5,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button Content="+" Margin="5,1" ToolTip="Ajouter une certification"
+                                    Click="ButtonAjoutCertif_OnClick"
+                                    IsEnabled="{Binding ElementName=TeachersListBox,Path=SelectedIndex,
+                        Converter={StaticResource SelectedIndexToBoolConverter} }"/>
+
+                            <Button Content="-" Margin="5,1" ToolTip="Supprimer la certification selectionné"
+                                    Click="ButtonSupprimerCertif_OnClick"
+                            IsEnabled="{Binding ElementName=ListBoxCertif,Path=SelectedIndex,
+                        Converter={StaticResource SelectedIndexToBoolConverter} }" />
+
+                        </StackPanel>
+
+                        <!--coursdonnée-->
+                        <TextBlock Text="STA pour les cours:" Margin="1,10,1,1" FontSize="16" />
+
+                        <ListBox ItemsSource="{Binding Repartition}" Name="ListBoxCours" 
+                                 BorderThickness="1" BorderBrush="LightGray">
+                            <ListBox.Resources>
+                                <ContextMenu x:Key="ContextMenu" >
+                                    <MenuItem Header="Supprimer" Click="ButtonSupprimerCours_OnClick"/>
+                                    <MenuItem Header="Ajouter une certification" Click="ButtonAjoutCours_OnClick"/>
+                                </ContextMenu>
+
+                                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="ContextMenu" Value="{StaticResource ContextMenu}"/>
+                                </Style>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Courses.Id}" Margin="5,1" FontWeight="Bold"/>
+
+                                        <TextBlock Grid.Column="1" Text="{Binding Courses.Name}" Margin="5,1"/>
+
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Path Grid.Column="2" Height="15" Width="15" Data="M52.765,37.490002L52.765,41.404001 56.680001,41.404001 56.680001,37.490002z M7.3190002,37.490002L7.3190002,41.404001 11.234,41.404001 11.234,37.490002z M37.787003,37.489999L37.787003,41.574 41.872002,41.574 41.872002,37.489999z M29.957001,37.489999L29.957001,41.574 34.042002,41.574 34.042002,37.489999z M22.128001,37.489999L22.128001,41.574 26.212002,41.574 26.212002,37.489999z M48.169999,34.255001L61.276001,34.255001 61.276001,51.276001 48.169999,51.276001z M2.7229996,34.255001L15.829,34.255001 15.829,51.276001 2.7229996,51.276001z M37.787003,28.298001L37.787003,32.383001 41.872002,32.383001 41.872002,28.298001z M29.957001,28.298001L29.957001,32.383001 34.042002,32.383001 34.042002,28.298001z M22.128001,28.298001L22.128001,32.383001 26.212002,32.383001 26.212002,28.298001z M48.169999,27.788002L64,27.788002 64,31.362001 48.169999,31.362001z M0,27.788002L15.829,27.788002 15.829,31.362001 0,31.362001z M32.170098,15.703001L45.957001,24.723701 45.957001,51.446001 34.042002,51.446001 34.042002,46.000002 29.957001,46.000002 29.957001,51.446001 18.383,51.446001 18.383,24.723701z M31.021,0L33.064,0 33.064,1.48843 33.104409,1.5006828C34.123854,1.7944679,36.340107,2.0908051,40.085003,0.97900009L40.085003,6.2548065C40.085003,6.2548065,35.419613,7.3459492,33.194796,6.7662792L33.064,6.7268276 33.064,8.7389374 49.702,19.617363 47.319211,22.8518 31.9996,12.637983 16.510687,23.021002 14.298,19.617363 31.021,8.6828671z"
+                                              Stretch="Uniform" Margin="5,1,0,1"
+                                              Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                            AncestorLevel=1,AncestorType=ListBoxItem},Path=Foreground}"/>
+                                            <TextBlock Text="{Binding Campus}" Margin="5,1"/>
+                                        </StackPanel>
+
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button Content="+" Margin="5,1" ToolTip="Ajouter un cours"
+                                    Click="ButtonAjoutCours_OnClick"
+                                    IsEnabled="{Binding ElementName=TeachersListBox,Path=SelectedIndex,
+                        Converter={StaticResource SelectedIndexToBoolConverter} }"/>
+
+                            <Button Content="-" Margin="5,1" ToolTip="Supprimer le cours selectionné"
+                                    Click="ButtonSupprimerCours_OnClick"
+                            IsEnabled="{Binding ElementName=ListBoxCours,Path=SelectedIndex,
+                        Converter={StaticResource SelectedIndexToBoolConverter} }" />
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

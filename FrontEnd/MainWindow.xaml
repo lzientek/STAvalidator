@@ -1,0 +1,169 @@
+﻿<Window x:Class="MP22NET.WpfFrontEnd.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vue="clr-namespace:MP22NET.WpfFrontEnd.Vue"
+        Title="STA Validator" Height="650" Width="955"
+        MinWidth="820" MinHeight="370" AllowsTransparency="True" 
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"      
+        Icon="icone.ico" WindowStyle="None"                          
+        Closing="MainWindow_OnClosing" BorderThickness="0" BorderBrush="Transparent"    
+        >
+    <Window.Resources>
+        <Storyboard x:Key="AffichageBoutonRecherche">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="button">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="button">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="button">
+                <EasingPointKeyFrame KeyTime="0" Value="1,0.5"/>
+            </PointAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid MouseLeftButtonDown="Deplacement_OnMouseLeftButtonDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Background="DodgerBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Source="icone.ico" Margin="4" />
+
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="White" FontSize="20"
+                       Text="{Binding RelativeSource=
+                {RelativeSource Mode=FindAncestor,AncestorLevel=1,AncestorType=Window},Path=Title}" />
+
+            <Button Grid.Column="3" Click="Buttonminimize_OnClick" FontWeight="Bold" 
+                    Style="{StaticResource WindowButton}" Margin="0,0,0,1">
+                <Path Data="M0,0L53.333,0 53.333,8.888 0,8.888z" 
+                      Stretch="Uniform" 
+                      Fill="DimGray" Width="15" Height="15" Margin="0,0,0,4" 
+                      RenderTransformOrigin="0.5,0.5" VerticalAlignment="Bottom"/>
+            </Button>
+            
+            <Button Grid.Column="4" Click="ButtonMaximize_OnClick"
+                    Style="{StaticResource WindowButton}" Margin="0,0,0,1">
+                <Path Data="M4.3685131,23.127279L4.3685131,47.283243 47.117023,47.283243 47.117023,23.127279z M25.087107,13.948568C23.539013,13.948568 22.286318,15.201555 22.286318,16.74834 22.286318,18.292325 23.539013,19.547214 25.087107,19.547214 26.6327,19.547214 27.886597,18.292325 27.886597,16.74834 27.886597,15.201555 26.6327,13.948568 25.087107,13.948568z M16.126242,13.948568C14.580646,13.948568 13.326751,15.201555 13.326751,16.74834 13.326751,18.292325 14.580646,19.547214 16.126242,19.547214 17.673136,19.547214 18.928329,18.292325 18.928329,16.74834 18.928329,15.201555 17.673136,13.948568 16.126242,13.948568z M7.1679735,13.948568C5.621069,13.948568 4.3685136,15.201555 4.3685131,16.74834 4.3685136,18.292325 5.621069,19.547214 7.1679735,19.547214 8.713438,19.547214 9.9674625,18.292325 9.9674625,16.74834 9.9674625,15.201555 8.713438,13.948568 7.1679735,13.948568z M0,10.684L53.755001,10.684 53.755001,51.668001 0,51.668001z M8.5679998,0L58.668022,0 64,0 64,5.6864691 64,45.317999 58.668022,45.317999 58.668022,5.6864691 8.5679998,5.6864691z" Stretch="Uniform" 
+                      Fill="DimGray" Width="15" Height="15" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5"/>
+            </Button>
+            
+            <Button  Grid.Column="5" Content="X" Click="ButtonClick_OnClick" 
+                     FontWeight="Bold" OverridesDefaultStyle="True" 
+                    Style="{StaticResource WindowButton}" Foreground="Firebrick" Margin="0,0,0,1"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+
+
+            <TabControl Name="TabControlMenu" 
+                    SelectionChanged="TabControlMenu_SelectionChanged" >
+
+                <!--tab teach-->
+                <TabItem  RenderTransformOrigin="0.5,0.5"  >
+                    <TabItem.Header>
+                        <TextBlock Text="STAs" FontSize="24" FontWeight="Light"  FontFamily="Segoe UI"  />
+                    </TabItem.Header>
+                    <TabItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform />
+                            <TranslateTransform Y="0"/>
+                        </TransformGroup>
+                    </TabItem.RenderTransform>
+
+                    <vue:TeacherListView />
+                </TabItem>
+
+
+                <!--tab question-->
+                <TabItem  RenderTransformOrigin="0.5,0.5"  >
+                    <TabItem.Header>
+                        <TextBlock Text="Cours &amp; Questions" FontSize="24" FontWeight="Light" FontFamily="Segoe UI"  />
+                    </TabItem.Header>
+                    <TabItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TabItem.RenderTransform>
+                    <vue:QuestionListView />
+                </TabItem>
+
+                <!--tab frame-->
+                <TabItem >
+                    <TabItem.Header>
+                        <TextBlock Text="Validation" FontSize="24" FontWeight="Light" FontFamily="Segoe UI"  />
+                    </TabItem.Header>
+                    <TabItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TabItem.RenderTransform>
+                    <Frame Source="\Vue\Pages\ValidationPageChoixProf.xaml" 
+                                Margin="20" NavigationUIVisibility="Hidden" />
+
+                </TabItem>
+
+
+            </TabControl>
+
+
+            <!--champ recherche-->
+            <Grid Width="300" Margin="0,0,30,0"  HorizontalAlignment="Right" VerticalAlignment="Top">
+
+
+                <TextBox  Margin="0,5" Name="RechercheTextBox" Height="23" 
+                      Text="{Binding Source={StaticResource Data},
+                        Path=Recherche,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                      TextChanged="RechercheTextBox_OnTextChanged"
+                      GotFocus="RechercheTextBox_OnGotFocus"
+                      LostFocus="RechercheTextBox_OnLostFocus" 
+                      VerticalContentAlignment="Center" x:FieldModifier="private">
+                    <TextBox.IsEnabled>
+                        <Binding ElementName="TabControlMenu" 
+                             Path="SelectedContent" 
+                             Converter="{StaticResource CanSearchToIsEnableMultiConverter}" />
+                    </TextBox.IsEnabled>
+                </TextBox>
+
+                <Button x:Name="button" Grid.Column="1" Margin="0,5" Click="ButtonStopRecherche_OnClick"
+                    Padding="0" HorizontalAlignment="Right" ToolTip="Fermer la recherche."
+                    IsVisibleChanged="Button_OnIsVisibleChanged"
+                    Visibility="{Binding Source={StaticResource Data},
+                Path=IsInRecheche,Converter={StaticResource BoolToVisibilityConverter}}"
+                    RenderTransformOrigin="0.5,0.5" Width="75">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+
+                    <Path Data="F1M54.0573,47.8776L38.1771,31.9974 54.0547,16.1198C55.7604,14.4141 55.7604,11.6511 54.0573,9.94531 52.3516,8.23962 49.5859,8.23962 47.8802,9.94531L32.0026,25.8229 16.1224,9.94531C14.4167,8.23962 11.6511,8.23962 9.94794,9.94531 8.24219,11.6511 8.24219,14.4141 9.94794,16.1198L25.8255,32 9.94794,47.8776C8.24219,49.5834 8.24219,52.3477 9.94794,54.0534 11.6511,55.7572 14.4167,55.7585 16.1224,54.0534L32.0026,38.1745 47.8802,54.0534C49.5859,55.7585 52.3516,55.7572 54.0573,54.0534 55.7604,52.3477 55.763,49.5834 54.0573,47.8776z"
+                      Height="15" Stretch="Uniform" Fill="White" />
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
